@@ -320,6 +320,12 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every push and pull request:
 - Every interactive state is handled: loading screen, API-offline banner with retry, per-offer activation spinner, form pending state, toast feedback and empty states.
 - All timestamps are serialized as UTC (`+00:00`) so relative times stay correct in every timezone.
 
-## Production notes
+## Production Readiness & Future Enhancements
 
-This project is a self-contained demo. Before deploying publicly, add authentication/authorization, rate-limit the telemetry endpoint, restrict CORS to your production origin, move to a managed database, and run behind HTTPS.
+This build is configured for zero-dependency local evaluation. For a production financial deployment, the architecture is designed to support:
+
+- **Authentication & Authorization:** OAuth 2.0 / JWT-based cardholder session management and role-based access control (RBAC).
+- **API Hardening:** Rate-limiting on `POST /api/v1/telemetry` and `POST /api/v1/transactions` to prevent abuse and replay attacks.
+- **Network & Transport Security:** Strict CORS origin allowlisting and TLS/HTTPS termination via a reverse proxy or API gateway.
+- **Managed Persistence:** Drop-in migration from SQLite to managed **PostgreSQL** via the existing `DATABASE_URL` SQLAlchemy configuration.
+
